@@ -1,5 +1,5 @@
 datasource db {
-  provider = "postgresql"
+  provider = "sqlserver"
   url = env("DATABASE_URL")
 }
 
@@ -7,23 +7,26 @@ generator client {
   provider = "prisma-client-js"
 }
 
-enum UserType {
-  STUDENT
-  INSTRUCTOR
-}
+//Aadil removed below 4 lines due to sqlserver database instead of postgres database 
+//enum UserType {
+//  STUDENT
+// INSTRUCTOR
+//}
 
 model User {
   id            String         @id @default(cuid())
   email         String         @unique
-  userType      UserType?
+  userType	String?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   notes         Note[]
-  password      Password?
+  password	Password?
   instructions  Instruction[]  @relation("UserInstructions")
-  questions     Question[]     // Relation to Question removed courseId
+  questions     Question[]     @relation("UserQuestions")
   files         File[]         // Relation to File removed courseId
 }
+
+
 
 model Password {
   hash   String
@@ -47,11 +50,11 @@ model Question {
   body          String
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
-  createdBy     User?         @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  createdBy     User?         @relation("UserQuestions", fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   userId        String?
   instructionId String?       // Removed @unique
   instruction   Instruction?  @relation(fields: [instructionId], references: [id], onDelete: SetNull)
-  tags          Tag[]     
+  tags          Tag[]
 }
 
 model Instruction {
@@ -61,7 +64,7 @@ model Instruction {
   isDefault  Boolean    @default(false)
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
-  createdBy  User       @relation("UserInstructions", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  createdBy  User	@relation("UserInstructions", fields: [userId], references: [id], onDelete: NoAction, onUpdate: Cascade)
   userId     String
   questions  Question[] // Explicitly define the one-to-many relationship
 }
@@ -80,7 +83,7 @@ model File {
 model Tag {
   id         Int        @id @default(autoincrement())
   name       String     @unique
-  questions  Question[] 
+  questions  Question[]
 }
 
 model Feedback {
