@@ -20,6 +20,10 @@ async function run() {
   const BUILD_PATH = path.resolve("build/index.js");
   const VERSION_PATH = path.resolve("build/version.txt");
 
+  //debugging
+  console.log("BUILD_PATH:", BUILD_PATH);
+  console.log("File Exists:", fs.existsSync(BUILD_PATH));
+
   const initialBuild = await reimportServer();
   const remixHandler =
     process.env.NODE_ENV === "development"
@@ -115,6 +119,7 @@ async function run() {
     console.log(`✅ metrics ready: http://localhost:${metricsPort}/metrics`);
   });
 
+  /**
   async function reimportServer(): Promise<ServerBuild> {
     // cjs: manually remove the server build from the require cache
     Object.keys(require.cache).forEach((key) => {
@@ -131,6 +136,29 @@ async function run() {
     // use a timestamp query parameter to bust the import cache
     return import(BUILD_URL + "?t=" + stat.mtimeMs);
   }
+  */
+
+  //Debugging with a new reimportServer function by removing the query string
+  async function reimportServer(): Promise<ServerBuild> {
+    // cjs: manually remove the server build from the require cache
+    Object.keys(require.cache).forEach((key) => {
+      if (key.startsWith(BUILD_PATH)) {
+        delete require.cache[key];
+      }
+    });
+  
+    const stat = fs.statSync(BUILD_PATH);
+  
+    // convert build path to URL for Windows compatibility with dynamic `import`
+    let BUILD_URL = url.pathToFileURL(BUILD_PATH).href;
+  
+    // Remove any query string (e.g. "?t=...") from the URL
+    BUILD_URL = BUILD_URL.split('?')[0];
+  
+    // use a timestamp query parameter to bust the import cache
+    return import(BUILD_URL + "?t=" + stat.mtimeMs);
+  }
+  
 
   async function createDevRequestHandler(
     initialBuild: ServerBuild,
