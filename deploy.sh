@@ -69,8 +69,11 @@ fi
 # Pull the latest changes and reset to the latest commit
 git pull origin "$GIT_BRANCH" || { echo "Git pull failed. Exiting."; exit 1; }
 
+# reset ownership and permissions
+sudo chown -R abdalmoh:aitutor .
+sudo chmod -R 755 .
 # Set execute permissions for deploy.sh so it can run after the pull
-chmod +x deploy.sh
+#chmod +x deploy.sh
 
 # Install dependencies, build, run migrations, and restart the app with PM2
 echo "Installing dependencies..."
