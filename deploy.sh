@@ -11,8 +11,8 @@
 # 	If --force is passed, deployment will continue even with no new commit.
 
 # Variables
-GIT_BRANCH="dev"  		# !!(1)!! Change if deploying a different branch
-REPO_DIR="/path/to/yourproject/homefolder/same/as/in/etc/conf.d"	#!!(2)!! change as needed
+GIT_BRANCH="main"  		# !!(1)!! Change if deploying a different branch
+REPO_DIR="/srv/www/aitutor.ok.ubc.ca"	#!!(2)!! change as needed
 DOCKER_COMPOSE_FILE="docker-compose.yml"
 LAST_COMMIT_FILE="$REPO_DIR/.last_commit"
 LOCKFILE="/tmp/deploy.lock"
