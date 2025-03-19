@@ -25,6 +25,18 @@ async function seed() {
     },
   });
 
+  const user2 = await prisma.user.create({
+    data: {
+      email: "instructor@email.com",
+      password: {
+        create: {
+          hash: "password",
+        },
+      },
+      userType: "INSTRUCTOR", // or "INSTRUCTOR", depending on the user being created
+    },
+  });
+
   await prisma.note.create({
     data: {
       title: "My first note",
