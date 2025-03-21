@@ -83,7 +83,7 @@ npm run build || { echo "Build failed. Exiting."; exit 1; }
 echo "Running database migrations..."
 npx prisma migrate deploy || { echo "Database migration failed. Exiting."; exit 1; }
 echo "Restarting application with PM2..."
-pm2 delete aitutor || { echo "Can't delete aitutor."}
+pm2 delete aitutor
 pm2 restart ecosystem.config.cjs --update-env || { echo "PM2 restart failed. Exiting."; exit 1; }
 
 # Save the latest commit hash
