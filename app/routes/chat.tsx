@@ -94,6 +94,7 @@ const Chat: React.FC = () => {
 
   // The code below is ultilizing the OpenAI Assistants API to create a chatbot where an instruciton can be assigned to it
   useEffect(() => {
+    console.log("API Key:", openaiApiKey ? "Exists" : "MISSING");
     if (openaiApiKey) {
       initChatBot(openaiApiKey); // ✅ Now it correctly passes the API key
     }
