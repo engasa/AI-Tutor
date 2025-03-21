@@ -35,6 +35,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     questionBody: "",
     instructionContent:
       defaultInstruction?.content || "Default instruction content not found.",
+    openaiApiKey: process.env.OPENAI_API_KEY || "", // ✅ Securely passing API key from server side to client side
   };
 
   if (questionId) {
@@ -48,6 +49,7 @@ export const loader: LoaderFunction = async ({ request }) => {
           questionDetails.instruction?.content ||
           defaultInstruction?.content ||
           "Default instruction content not found.",
+        openaiApiKey: process.env.OPENAI_API_KEY || "",
       };
     }
   }
@@ -67,7 +69,8 @@ const Chat: React.FC = () => {
   const [files, setFiles] = useState<File[]>([]);
 
   const user = useUser();
-  const { questionBody, instructionContent } = useLoaderData<typeof loader>();
+  const { questionBody, instructionContent, openaiApiKey } =
+    useLoaderData<typeof loader>(); // ✅ Retrieve API Key from loader
 
   // Below is the code for fetching files from the server
   // However, this code is not fully working, as to access server files in assitant API is not implemented
@@ -91,8 +94,10 @@ const Chat: React.FC = () => {
 
   // The code below is ultilizing the OpenAI Assistants API to create a chatbot where an instruciton can be assigned to it
   useEffect(() => {
-    initChatBot();
-  }, []); // Initialize the chatbot when the component mounts
+    if (openaiApiKey) {
+      initChatBot(openaiApiKey); // ✅ Now it correctly passes the API key
+    }
+  }, [openaiApiKey]); // Initialize the chatbot when the component mounts
 
   useEffect(() => {
     setMessages([
@@ -111,7 +116,7 @@ const Chat: React.FC = () => {
   // IMPORTANT: API key must be filled in for the chatbot to work
   // The API key is not included in the code snippet for security reasons
   // It is possible to save the key inside the .env file and access it using process.env.API_KEY
-  const initChatBot = async () => {
+  const initChatBot = async (apiKey: string) => {
     console.log("Initializing chatbot...");
     const openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
