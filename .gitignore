@@ -7,3 +7,4 @@ ecosystem.config.cjs
 /cypress/screenshots
 /cypress/videos
 /postgres-data
+ecosystem.config.cjs
