@@ -1,10 +1,7 @@
 node_modules
-
 /build
 /public/build
 .env
-ecosystem.config.cjs
 /cypress/screenshots
 /cypress/videos
 /postgres-data
-ecosystem.config.cjs
