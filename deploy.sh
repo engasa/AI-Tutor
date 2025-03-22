@@ -77,7 +77,7 @@ sudo chmod -R 755 .
 
 # Install dependencies, build, run migrations, and restart the app with PM2
 echo "Installing dependencies..."
-npm install || { echo "npm install failed. Exiting."; exit 1; }
+# npm install || { echo "npm install failed. Exiting."; exit 1; }
 echo "Building application..."
 npm run build || { echo "Build failed. Exiting."; exit 1; }
 echo "Running database migrations..."
