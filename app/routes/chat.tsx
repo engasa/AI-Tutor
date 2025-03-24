@@ -120,7 +120,7 @@ const Chat: React.FC = () => {
   const initChatBot = async (apiKey: string) => {
     console.log("Initializing chatbot...");
     const openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
+      apiKey: apiKey,
       dangerouslyAllowBrowser: true,
       defaultHeaders: { "OpenAI-Beta": "assistants=v2" },
     });
